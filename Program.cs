@@ -37,18 +37,18 @@
     // Exit the program
     using mission3;
 
-    bool continueProgram = true;
-    List<FoodItem> foodItems = new List<FoodItem>();
+    bool stopProgram = false;
+    List<FoodItem?> foodItems = new List<FoodItem?>();
 
-    while (continueProgram == true)
+    while (stopProgram == false)
     {
         Console.WriteLine("Select an option:");
         Console.WriteLine("1. Add food item");
         Console.WriteLine("2. Delete food item");
         Console.WriteLine("3. List food items");
         Console.WriteLine("4. Exit");
-        
-        string userInput = Console.ReadLine();
+
+        string userInput = Console.ReadLine() ?? "empty"; // Pass value that will automatically say is an invalid input
         if (int.TryParse(userInput, out int choice))
         {
             switch (choice)
@@ -57,13 +57,13 @@
                     // Get food item information from user for name and category
                     Console.WriteLine("Add food item");
                     Console.WriteLine("Enter food item name: ");
-                    string foodName = Console.ReadLine();
+                    string foodName = Console.ReadLine() ?? "No food name";
                     Console.WriteLine("Enter food item category: ");
-                    string foodCategory = Console.ReadLine();
+                    string foodCategory = Console.ReadLine() ?? "No food category";
                     
                     // Get units of food
                     Console.WriteLine("Enter food quantity: ");
-                    // Verifty integer entry from user
+                    // Verify integer entry from user
                     int foodQuantity;
                     while (!int.TryParse(Console.ReadLine(), out foodQuantity) || foodQuantity < 0)
                     {
@@ -85,14 +85,19 @@
                     // Delete food item object from the list in pantry
                     Console.WriteLine("Delete a food item");
                     Console.WriteLine("Enter food item name: ");
-                    string foodItemName = Console.ReadLine();
+                    string foodItemName = Console.ReadLine() ?? "No food item name";
                     FoodItem itemToDelete = foodItems.Find(item => item.Name.Equals(foodItemName, StringComparison.OrdinalIgnoreCase));
                     foodItems.Remove(itemToDelete);
+                    
+                    // Continue program when user has deleted item
+                    Console.WriteLine("Deleted: " + foodItemName);
+                    Console.WriteLine("Press Enter to continue");
+                    Console.ReadLine();
                     break;
                 case 3:
                     Console.WriteLine("List of food items");
                     // Loop through list and print current items
-                    foreach (FoodItem foodItem in foodItems)
+                    foreach (FoodItem? foodItem in foodItems)
                     {
                         Console.WriteLine(foodItem.Name);
                         Console.WriteLine(foodItem.Quantity  + " units of food item");
@@ -101,14 +106,14 @@
                         Console.WriteLine(" ");
                     }
                     
-                    // Continue program when user is finsished viewing list
-                    Console.WriteLine("Enter anything to continue");
+                    // Continue program when user is finished viewing list
+                    Console.WriteLine("Press Enter to continue");
                     Console.ReadLine();
                     break;
                 case 4:
                     // For communicating exit of program and changing value for looping program. Ends it.
                     Console.WriteLine("Exiting the program.");
-                    continueProgram = false; 
+                    stopProgram = true; 
                     break;
                 default:
                     Console.WriteLine("Invalid option. Please select a valid number (1-4).");
