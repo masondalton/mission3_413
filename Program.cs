@@ -38,7 +38,7 @@
     using mission3;
 
     bool stopProgram = false;
-    List<FoodItem?> foodItems = new List<FoodItem?>();
+    List<FoodItem> foodItems = new List<FoodItem>();
 
     while (stopProgram == false)
     {
@@ -54,12 +54,24 @@
             switch (choice)
             {
                 case 1:
-                    // Get food item information from user for name and category
                     Console.WriteLine("Add food item");
+                    
+                    // Get food item information from user for name
                     Console.WriteLine("Enter food item name: ");
-                    string foodName = Console.ReadLine() ?? "No food name";
+                    string foodName;
+                    while (string.IsNullOrWhiteSpace(foodName = Console.ReadLine()))
+                    {
+                        Console.WriteLine("Food name cannot be empty. Please enter a valid name:");
+                    }
+                    
+                    // Food category entry from user
                     Console.WriteLine("Enter food item category: ");
-                    string foodCategory = Console.ReadLine() ?? "No food category";
+                    string foodCategory;
+                    while (string.IsNullOrWhiteSpace(foodCategory = Console.ReadLine()))
+                    {
+                        Console.WriteLine("Food category cannot be empty. Please enter a valid name:");   
+                    }
+       
                     
                     // Get units of food
                     Console.WriteLine("Enter food quantity: ");
@@ -87,23 +99,31 @@
                     Console.WriteLine("Enter food item name: ");
                     string foodItemName = Console.ReadLine() ?? "No food item name";
                     FoodItem itemToDelete = foodItems.Find(item => item.Name.Equals(foodItemName, StringComparison.OrdinalIgnoreCase));
-                    foodItems.Remove(itemToDelete);
                     
                     // Continue program when user has deleted item
-                    Console.WriteLine("Deleted: " + foodItemName);
+                    if (itemToDelete != null)
+                    {
+                        foodItems.Remove(itemToDelete);
+                        Console.WriteLine("Deleted: " + itemToDelete.Name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Item not found. Nothing to delete.");
+                    }
+
                     Console.WriteLine("Press Enter to continue");
                     Console.ReadLine();
                     break;
                 case 3:
                     Console.WriteLine("List of food items");
-                    // Loop through list and print current items
-                    foreach (FoodItem? foodItem in foodItems)
+                    // Loop through list and print current items, added styling with line break
+                    foreach (FoodItem foodItem in foodItems)
                     {
-                        Console.WriteLine(foodItem.Name);
-                        Console.WriteLine(foodItem.Quantity  + " units of food item");
-                        Console.WriteLine(foodItem.Category);
-                        Console.WriteLine(foodItem.ExpirationDate.ToString("MM/dd/yyyy"));
-                        Console.WriteLine(" ");
+                        Console.WriteLine($"Name: {foodItem.Name}");
+                        Console.WriteLine($"Category: {foodItem.Category}");
+                        Console.WriteLine($"Quantity: {foodItem.Quantity} units");
+                        Console.WriteLine($"Expiration Date: {foodItem.ExpirationDate:MM/dd/yyyy}");
+                        Console.WriteLine(new string('-', 20));
                     }
                     
                     // Continue program when user is finished viewing list
