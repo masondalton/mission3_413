@@ -39,7 +39,6 @@
 
     bool continueProgram = true;
     List<FoodItem> foodItems = new List<FoodItem>();
-    String userInput = "";
 
     while (continueProgram == true)
     {
@@ -49,27 +48,70 @@
         Console.WriteLine("3. List food items");
         Console.WriteLine("4. Exit");
         
-        userInput = Console.ReadLine();
+        string userInput = Console.ReadLine();
         if (int.TryParse(userInput, out int choice))
         {
             switch (choice)
             {
                 case 1:
-                    Console.WriteLine("You selected Option A.");
+                    // Get food item information from user for name and category
+                    Console.WriteLine("Add food item");
+                    Console.WriteLine("Enter food item name: ");
+                    string foodName = Console.ReadLine();
+                    Console.WriteLine("Enter food item category: ");
+                    string foodCategory = Console.ReadLine();
                     
+                    // Get units of food
+                    Console.WriteLine("Enter food quantity: ");
+                    // Verifty integer entry from user
+                    int foodQuantity;
+                    while (!int.TryParse(Console.ReadLine(), out foodQuantity) || foodQuantity < 0)
+                    {
+                        Console.WriteLine("Invalid quantity. Please enter a non-negative number:");
+                    }
+                    
+                    // Get expiration date. Verifies it is in correct format
+                    Console.WriteLine("Enter food expiration: ");
+                    DateTime expirationDate;
+                    while (!DateTime.TryParse(Console.ReadLine(), out expirationDate))
+                    {
+                        Console.WriteLine("Invalid date format. Please enter a valid date (MM/dd/yyyy):");
+                    }
+                    
+                    // Add information to object and add to list of food items
+                    foodItems.Add(new FoodItem(foodName, foodCategory, foodQuantity, expirationDate));
                     break;
                 case 2:
-                    Console.WriteLine("You selected Option B.");
+                    // Delete food item object from the list in pantry
+                    Console.WriteLine("Delete a food item");
+                    Console.WriteLine("Enter food item name: ");
+                    string foodItemName = Console.ReadLine();
+                    FoodItem itemToDelete = foodItems.Find(item => item.Name.Equals(foodItemName, StringComparison.OrdinalIgnoreCase));
+                    foodItems.Remove(itemToDelete);
                     break;
                 case 3:
-                    Console.WriteLine("You selected Option C.");
+                    Console.WriteLine("List of food items");
+                    // Loop through list and print current items
+                    foreach (FoodItem foodItem in foodItems)
+                    {
+                        Console.WriteLine(foodItem.Name);
+                        Console.WriteLine(foodItem.Quantity  + " units of food item");
+                        Console.WriteLine(foodItem.Category);
+                        Console.WriteLine(foodItem.ExpirationDate.ToString("MM/dd/yyyy"));
+                        Console.WriteLine(" ");
+                    }
+                    
+                    // Continue program when user is finsished viewing list
+                    Console.WriteLine("Enter anything to continue");
+                    Console.ReadLine();
                     break;
                 case 4:
+                    // For communicating exit of program and changing value for looping program. Ends it.
                     Console.WriteLine("Exiting the program.");
                     continueProgram = false; 
                     break;
                 default:
-                    Console.WriteLine("Invalid option. Please select a valid number (1-3).");
+                    Console.WriteLine("Invalid option. Please select a valid number (1-4).");
                     break;
             }
         }
